@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.</groupId>
+    <groupId>com.fatjar</groupId>
     <artifactId>FatJarMaker</artifactId>
     <version>1.0-SNAPSHOT</version>
 
@@ -21,7 +21,12 @@
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-s3-fs-hadoop</artifactId>
             <version>1.15.2</version>
-            <scope>provided</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.flink/flink-parquet -->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-parquet</artifactId>
+            <version>1.15.2</version>
         </dependency>
     </dependencies>
     <build>
@@ -41,39 +46,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.4.1</version>
+                <configuration>
+                    <shadedArtifactAttached>true</shadedArtifactAttached>
+                    <shadedClassifierName>combined</shadedClassifierName> <!-- Any name that makes sense -->
+                </configuration>
                 <executions>
-                    <!-- Run shade goal on package phase -->
                     <execution>
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
                         </goals>
-                        <configuration>
-                            <!-- If the following is true the maven build is stuck -->
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <!-- -->
-                            <!--
-                            <artifactSet>
-                                <excludes>
-                                    <exclude>org.apache.flink:force-shading</exclude>
-                                    <exclude>com.google.code.findbugs:jsr305</exclude>
-                                    <exclude>org.slf4j:*</exclude>
-                                    <exclude>log4j:*</exclude>
-                                </excludes>
-                            </artifactSet>
-                            <filters>
-                                <filter>
-                                    <artifact>*:*</artifact>
-                                    <excludes>
-                                        <exclude>META-INF/*.SF</exclude>
-                                        <exclude>META-INF/*.DSA</exclude>
-                                        <exclude>META-INF/*.RSA</exclude>
-                                    </excludes>
-                                </filter>
-                            </filters>
-                    -->
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
